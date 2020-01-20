@@ -1,0 +1,9 @@
+[package]
+name = "p2pc"
+version = "0.1.0"
+authors = ["Vitalik Stepchik <vitalik.stepchik@omnixlabs.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]

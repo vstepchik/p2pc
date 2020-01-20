@@ -1,2 +1,2 @@
 # p2pc
-πтупиц
+peer-to-peer chat

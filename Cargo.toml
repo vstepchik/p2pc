@@ -1,9 +1,11 @@
 [package]
 name = "p2pc"
 version = "0.1.0"
-authors = ["Vitalik Stepchik <vitalik.stepchik@omnixlabs.com>"]
+authors = ["Vitalii Stepchyk <vitalatron@gmail.com>"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+gotham = "0.4"
+askama = "0.9"
+hyper = "0.12.17"
+mime = "0.3.12"

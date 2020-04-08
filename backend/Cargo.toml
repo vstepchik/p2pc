@@ -1,0 +1,32 @@
+[package]
+authors = ["Vitalii Stepchyk <vitalatron@gmail.com>"]
+description = "A web peer-to-peer chat completely written in rust"
+license = "MIT"
+name = "webapp-backend"
+readme = "../README.md"
+repository = "https://github.com/vstepchik/p2pc"
+version = "0.1.0"
+edition = "2018"
+
+[[bin]]
+name = "backend"
+path = "src/main.rs"
+
+[dev-dependencies]
+actix-http-test = "1.0.0"
+actix-http = "1.0.1"
+lazy_static = "1.4.0"
+reqwest = { version = "0.10.4", features = ["blocking", "json"] }
+
+[dependencies]
+gotham = "0.4"
+askama = "0.9"
+hyper = "0.12.17"
+mime = "0.3.12"
+
+env_logger = "0.7.1"
+log = "0.4.8"
+serde = { version = "1.0.104", features = ["derive"] }
+serde_json = "1.0.48"
+url = "2.1.1"
+p2pc = { version = "0.1.0", path = ".." }

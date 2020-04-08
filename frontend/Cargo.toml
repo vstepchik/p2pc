@@ -1,0 +1,35 @@
+[package]
+authors = ["Vitalii Stepchyk <vitalatron@gmail.com>"]
+description = "A web peer-to-peer chat completely written in rust"
+license = "MIT"
+name = "webapp-frontend"
+readme = "../README.md"
+repository = "https://github.com/vstepchik/p2pc"
+version = "0.1.0"
+edition = "2018"
+
+[lib]
+name="p2pc"
+crate-type = ["cdylib", "rlib"]
+
+[build-dependencies]
+anyhow = "1.0.26"
+sass-rs = "0.2.2"
+url = "2.1.1"
+p2pc = { version = "0.1.0", path = ".." }
+
+[dependencies]
+anyhow = "1.0.26"
+log = "0.4.8"
+serde = { version = "1.0.104", features = ["derive"] }
+thiserror = "1.0.11"
+p2pc = { version = "0.1.0", path = ".." }
+yew = { version = "0.13.0", features = ["web_sys"] }
+yew-router = { version = "0.10.0", features = ["web_sys"] }
+wasm-bindgen = "0.2.60"
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+  "Window"
+]

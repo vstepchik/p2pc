@@ -8,9 +8,9 @@ repository = "https://github.com/vstepchik/p2pc"
 version = "0.1.0"
 edition = "2018"
 
-[[bin]]
-name = "app"
-path = "src/main.rs"
+[lib]
+name="p2pc"
+crate-type = ["cdylib", "rlib"]
 
 [build-dependencies]
 anyhow = "1.0.26"
@@ -22,8 +22,14 @@ p2pc = { version = "0.1.0", path = ".." }
 anyhow = "1.0.26"
 log = "0.4.8"
 serde = { version = "1.0.104", features = ["derive"] }
-stdweb = "0.4.20"
 thiserror = "1.0.11"
 p2pc = { version = "0.1.0", path = ".." }
-yew = { version = "0.13.0", features = ["std_web"] }
-yew-router = { version = "0.10.0", features = ["std_web"] }
+yew = { version = "0.13.0", features = ["web_sys"] }
+yew-router = { version = "0.10.0", features = ["web_sys"] }
+wasm-bindgen = "0.2.60"
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+  "Window"
+]

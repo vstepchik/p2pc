@@ -38,6 +38,7 @@ where
 
 fn prepare_style() -> Result<()> {
     // Prepare the directory
+    println!("Preparing UiKit");
     let out_dir = env::var("OUT_DIR")?;
     let mut target = PathBuf::from(out_dir);
     target.push("uikit");
@@ -55,17 +56,20 @@ fn prepare_style() -> Result<()> {
     }
 
     // Copy the scss file into the output directory
+    println!("Copying SCSS");
     target.pop();
     target.push(SCSS_FILE);
     copy(format!("src/{}", SCSS_FILE), &target)?;
 
     // Build the file
+    println!("Compiling SCSS");
     let mut options = Options::default();
     options.output_style = OutputStyle::Compressed;
     match compile_file(&target, options) {
         Err(error) => panic!(error),
         Ok(content) => {
             // Copy the file into the static directory
+            println!("Copying resulting CSS into the static directory");
             target.pop();
             target.push(CSS_FILE);
             write(&target, content)?;

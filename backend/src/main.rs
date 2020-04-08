@@ -1,5 +1,7 @@
 use askama::Template;
+use gotham::handler::assets::FileOptions;
 use gotham::helpers::http::response::{create_empty_response, create_response};
+use gotham::router::builder::{build_simple_router, DefineSingleRoute, DrawRoutes};
 use gotham::state::State;
 use hyper::{Body, Response, StatusCode};
 
@@ -36,8 +38,24 @@ pub fn index(state: State) -> (State, Response<Body>) {
 /// Run on the normal port for Gotham examples, passing the handler as the only function for the gotham web server.
 pub fn main() {
     let addr = "127.0.0.1:7878";
+
+    let router = build_simple_router(|route| {
+        // You can add a `to_dir` or `to_file` route simply using a
+        // `String` or `str` as above, or a `Path` or `PathBuf` to accept
+        // default options.
+        route.get("/").to(index);
+        // Or you can customize options for comressed file handling, cache
+        // control headers etc by building a `FileOptions` instance.
+        route.get("static/*").to_dir(
+            FileOptions::new("./backend/static")
+                .with_cache_control("no-cache")
+                .with_gzip(true)
+                .build(),
+        );
+    });
+
     println!("Listening at {}", addr);
-    gotham::start(addr, || Ok(index));
+    gotham::start(addr, router);
 }
 
 #[cfg(test)]

@@ -1,5 +1,4 @@
 GENERAL_ARGS = --release
-FRONTEND_ARGS = $(GENERAL_ARGS) -p webapp-frontend --target wasm32-unknown-unknown
 BACKEND_ARGS = $(GENERAL_ARGS) -p webapp-backend
 
 .PHONY: \
@@ -8,15 +7,19 @@ BACKEND_ARGS = $(GENERAL_ARGS) -p webapp-backend
 	lint-rustfmt \
 	lint-clippy \
 	run-backend \
-	run-frontend
+	run-frontend \
+	clean
 
-all: build-backend build-frontend
+all: build-frontend build-backend
 
 build-backend:
 	cargo build $(BACKEND_ARGS)
 
 build-frontend:
-	cargo web build $(FRONTEND_ARGS)
+	wasm-pack build --target web frontend
+	rollup ./frontend/main.js --format iife --file ./frontend/pkg/bundle.js
+	cp ./frontend/pkg/bundle.js ./frontend/pkg/p2pc_bg.wasm ./frontend/static/app/
+	brotli ./frontend/static/app/*
 
 lint-clippy:
 	cargo clippy --all -- -D warnings
@@ -29,4 +32,9 @@ run-backend:
 	cargo run $(BACKEND_ARGS)
 
 run-frontend:
-	cargo web start $(FRONTEND_ARGS) --auto-reload --host 0.0.0.0
+	build-frontend
+	python -m http.server -d ./frontend/static 8000
+
+clean:
+	cargo clean
+	rm -rd ./frontend/pkg/* ./frontend/static/app/*

@@ -31,8 +31,7 @@ lint-rustfmt:
 run-backend:
 	cargo run $(BACKEND_ARGS)
 
-run-frontend:
-	build-frontend
+run-frontend: build-frontend
 	python -m http.server -d ./frontend/static 8000
 
 clean:

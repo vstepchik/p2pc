@@ -19,7 +19,8 @@ build-frontend:
 	wasm-pack build --target web frontend
 	rollup ./frontend/main.js --format iife --file ./frontend/pkg/bundle.js
 	cp ./frontend/pkg/bundle.js ./frontend/pkg/p2pc_bg.wasm ./frontend/static/app/
-	brotli ./frontend/static/app/*
+	brotli -f ./frontend/static/app/*.{js,wasm} ./frontend/static/css/*.css
+	gzip -f9k ./frontend/static/app/*.{js,wasm} ./frontend/static/css/*.css
 
 lint-clippy:
 	cargo clippy --all -- -D warnings

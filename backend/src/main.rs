@@ -40,21 +40,20 @@ pub fn main() {
     let addr = "127.0.0.1:7878";
 
     let router = build_simple_router(|route| {
-        // You can add a `to_dir` or `to_file` route simply using a
-        // `String` or `str` as above, or a `Path` or `PathBuf` to accept
-        // default options.
-        route.get("/").to(index);
-        // Or you can customize options for comressed file handling, cache
-        // control headers etc by building a `FileOptions` instance.
-        route.get("static/*").to_dir(
-            FileOptions::new("./backend/static")
+        fn static_file_options(fs_path: &str) -> FileOptions {
+            FileOptions::new(fs_path)
                 .with_cache_control("no-cache")
                 .with_gzip(true)
-                .build(),
-        );
+                .with_brotli(true)
+                .build()
+        }
+
+        route.get("/").to(index);
+        route.get("css/*").to_dir(static_file_options("./backend/static/css"));
+        route.get("app/*").to_dir(static_file_options("./backend/static/app"));
     });
 
-    println!("Listening at {}", addr);
+    println!("Listening at http://{}", addr);
     gotham::start(addr, router);
 }
 

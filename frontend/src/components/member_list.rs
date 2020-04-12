@@ -1,16 +1,29 @@
+use std::rc::Rc;
 use yew::prelude::*;
+use crate::model::Member;
+use crate::components::NeqAssign;
 
 pub struct MemberList {
+    props: Props,
 }
 
 pub enum Msg {}
 
+#[derive(Properties, PartialEq, Clone)]
+pub struct Props {
+    pub members: Rc<Vec<Member>>,
+}
+
 impl Component for MemberList {
     type Message = Msg;
-    type Properties = ();
+    type Properties = Props;
 
-    fn create(_: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self {}
+    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
+        Self { props: props }
+    }
+
+    fn change(&mut self, props: Self::Properties) -> ShouldRender {
+        self.props.neq_assign(props)
     }
 
     fn update(&mut self, _msg: Self::Message) -> ShouldRender {
@@ -22,11 +35,14 @@ impl Component for MemberList {
     }
 }
 
-fn render_view(_cpt: &MemberList) -> Html {
+fn render_view(cpt: &MemberList) -> Html {
+    let render_member = |m: &Member| html! {
+        <div class="cpt-member"> { &m.name } </div>
+    };
+
     html! {
         <div class="cpt-member-list">
-            <div class="cpt-member">{ "vi?" }</div>
-            <div class="cpt-member">{ "zun!" }</div>
+            { for cpt.props.members.iter().map(render_member) }
         </div>
     }
 }

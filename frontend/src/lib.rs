@@ -1,6 +1,7 @@
 #![recursion_limit = "512"]
 
 mod components;
+mod model;
 
 use std::panic;
 use wasm_bindgen::prelude::*;

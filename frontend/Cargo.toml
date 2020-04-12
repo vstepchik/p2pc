@@ -29,6 +29,11 @@ yew-router = { version = "0.10.0", features = ["web_sys"] }
 wasm-bindgen = "0.2.60"
 console_error_panic_hook = "0.1.6"
 
+[dependencies.chrono]
+version = "0.4"
+default-features = false
+features = ["wasmbind", "js-sys", "clock"]
+
 [dependencies.web-sys]
 version = "0.3"
 features = [

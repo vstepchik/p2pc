@@ -23,7 +23,6 @@ impl Component for Chat {
         let members = Rc::new(vec![
             Rc::new(Member { name: Rc::new("vi?".to_string()) }),
             Rc::new(Member { name: Rc::new("zun!".to_string()) }),
-            Rc::new(Member { name: Rc::new("<somebody>".to_string()) }),
         ]);
         let messages = Rc::new(vec![
             Message { from: Rc::clone(&members[1]), sent_at: Utc::now(), text: Rc::new("Hello!!".to_string()) },

@@ -11,7 +11,7 @@ pub enum Msg {}
 
 #[derive(Properties, PartialEq, Clone)]
 pub struct Props {
-    pub members: Rc<Vec<Member>>,
+    pub members: Rc<Vec<Rc<Member>>>,
 }
 
 impl Component for MemberList {
@@ -19,7 +19,7 @@ impl Component for MemberList {
     type Properties = Props;
 
     fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props: props }
+        Self { props }
     }
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
@@ -36,7 +36,7 @@ impl Component for MemberList {
 }
 
 fn render_view(cpt: &MemberList) -> Html {
-    let render_member = |m: &Member| html! {
+    let render_member = |m: &Rc<Member>| html! {
         <div class="cpt-member"> { &m.name } </div>
     };
 

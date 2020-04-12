@@ -1,16 +1,29 @@
+use std::rc::Rc;
 use yew::prelude::*;
+use crate::model::Message;
+use crate::components::NeqAssign;
 
 pub struct MessageView {
+    props: Props,
 }
 
 pub enum Msg {}
 
+#[derive(Properties, PartialEq, Clone)]
+pub struct Props {
+    pub messages: Rc<Vec<Message>>,
+}
+
 impl Component for MessageView {
     type Message = Msg;
-    type Properties = ();
+    type Properties = Props;
 
-    fn create(_: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self {}
+    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
+        Self { props }
+    }
+
+    fn change(&mut self, props: Self::Properties) -> ShouldRender {
+        self.props.neq_assign(props)
     }
 
     fn update(&mut self, _msg: Self::Message) -> ShouldRender {
@@ -22,11 +35,20 @@ impl Component for MessageView {
     }
 }
 
-fn render_view(_cpt: &MessageView) -> Html {
+fn render_view(cpt: &MessageView) -> Html {
+    fn render_msg(m: &Message) -> Html {
+        html! {
+            <div class="cpt-msg">
+                <span class="msg-time">{ format!("[{}]", &m.sent_at.format("%y-%m-%d %T")) }</span>
+                <span class="msg-member">{ &m.from.name }</span>
+                <span class="msg-text">{ &m.text }</span>
+            </div>
+        }
+    }
+
     html! {
         <div class="cpt-msg-view">
-            <div class="cpt-msg"><span class="msg-time">{"[2020-04-12 01:19]"}</span><span class="msg-member">{"zun!"}</span><span class="msg-text">{"Hello!"}</span></div>
-            <div class="cpt-msg"><span class="msg-time">{"[2020-04-12 01:21]"}</span><span class="msg-member">{"vi?"}</span><span class="msg-text">{"Hello also."}</span></div>
+            { for cpt.props.messages.iter().map(render_msg) }
         </div>
     }
 }

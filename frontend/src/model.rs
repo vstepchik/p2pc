@@ -6,6 +6,12 @@ pub struct Member {
     pub name: Rc<String>,
 }
 
+impl Member {
+    pub fn new(name: &str) -> Self {
+        Member { name: Rc::new(name.to_string()) }
+    }
+}
+
 #[derive(PartialEq, Clone)]
 pub struct Message {
     pub from: Rc<Member>,

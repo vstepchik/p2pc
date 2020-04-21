@@ -5,10 +5,12 @@ use crate::components::{
     member_list::MemberList,
     message_view::MessageView,
     message_input::MessageInput,
+    nickname_input::NicknameInput,
 };
 use crate::model::{Member, Message};
 
 pub struct Chat {
+    local_member: Option<Rc<Member>>,
     members: Rc<Vec<Rc<Member>>>,
     messages: Rc<Vec<Message>>,
 }
@@ -29,7 +31,7 @@ impl Component for Chat {
             Message { from: Rc::clone(&members[0]), sent_at: Utc::now(), text: Rc::new("Hello also.".to_string()) },
         ]);
 
-        Self { members, messages }
+        Self { local_member: None, members, messages }
     }
 
     fn update(&mut self, _msg: Self::Message) -> ShouldRender {
@@ -37,18 +39,40 @@ impl Component for Chat {
     }
 
     fn view(&self) -> Html {
-        render_view(self)
+        self.render_view()
     }
 }
 
-fn render_view(cpt: &Chat) -> Html {
-    html! {
-        <div class="container-global flex-row">
+impl Chat {
+    fn render_view(&self) -> Html {
+        html! {
+            <div class="container-global flex-row">
+                {
+                    if self.local_member.is_some() {
+                        self.render_messages()
+                    } else {
+                        self.render_intro()
+                    }
+                }
+                <div class="container-member-list"><MemberList members=&self.members></MemberList></div>
+            </div>
+        }
+    }
+    
+    fn render_messages(&self) -> Html {
+        html! {
             <div class="container-chat">
-                <div class="container-msg-view"><MessageView messages=&cpt.messages /></div>
+                <div class="container-msg-view"><MessageView messages=&self.messages /></div>
                 <div class="container-msg-input"><MessageInput /></div>
             </div>
-            <div class="container-member-list"><MemberList members=&cpt.members></MemberList></div>
-        </div>
+        }
+    }
+
+    fn render_intro(&self) -> Html {
+        html! {
+            <div class="container-intro">
+                <NicknameInput />
+            </div>
+        }
     }
 }

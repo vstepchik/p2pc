@@ -4,6 +4,7 @@ pub mod chat;
 pub mod member_list;
 pub mod message_input;
 pub mod message_view;
+pub mod nickname_input;
 
 pub trait NeqAssign {
     fn neq_assign(&mut self, new: Self) -> ShouldRender;

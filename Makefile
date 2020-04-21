@@ -37,4 +37,4 @@ run-frontend: build-frontend
 
 clean:
 	cargo clean
-	rm -rd ./frontend/pkg/* ./frontend/static/app/*
+	rm -rf ./frontend/pkg/* ./frontend/static/app/*

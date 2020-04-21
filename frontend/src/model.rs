@@ -18,3 +18,9 @@ pub struct Message {
     pub sent_at: DateTime<Utc>,
     pub text: Rc<String>,
 }
+
+impl Message {
+    pub fn new(from: &Rc<Member>, sent_at: &DateTime<Utc>, text: &str) -> Self {
+        Self { from: Rc::clone(&from), sent_at: *sent_at, text: Rc::new(text.to_string()) }
+    }
+}

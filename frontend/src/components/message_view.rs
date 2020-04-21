@@ -1,4 +1,4 @@
-use std::rc::Rc;
+use std::cell::RefCell;
 use yew::prelude::*;
 use crate::model::Message;
 use crate::components::NeqAssign;
@@ -11,7 +11,7 @@ pub enum Msg {}
 
 #[derive(Properties, PartialEq, Clone)]
 pub struct Props {
-    pub messages: Rc<Vec<Message>>,
+    pub messages: RefCell<Vec<Message>>,
 }
 
 impl Component for MessageView {
@@ -48,7 +48,7 @@ fn render_view(cpt: &MessageView) -> Html {
 
     html! {
         <div class="cpt-msg-view">
-            { for cpt.props.messages.iter().map(render_msg) }
+            { for cpt.props.messages.borrow().iter().map(render_msg) }
         </div>
     }
 }

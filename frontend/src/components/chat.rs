@@ -1,4 +1,5 @@
 use std::rc::Rc;
+use std::cell::RefCell;
 use chrono::prelude::*;
 use yew::prelude::*;
 use crate::components::{
@@ -13,11 +14,12 @@ pub struct Chat {
     link: ComponentLink<Self>,
     local_member: Option<Rc<Member>>,
     members: Rc<Vec<Rc<Member>>>,
-    messages: Rc<Vec<Message>>,
+    messages: RefCell<Vec<Message>>,
 }
 
 pub enum Msg {
     SetLocalMember(String),
+    CreateMessage(String),
 }
 
 impl Component for Chat {
@@ -29,9 +31,9 @@ impl Component for Chat {
             Rc::new(Member::new("vi?")),
             Rc::new(Member::new("zun!")),
         ]);
-        let messages = Rc::new(vec![
-            Message { from: Rc::clone(&members[1]), sent_at: Utc::now(), text: Rc::new("Hello!!".to_string()) },
-            Message { from: Rc::clone(&members[0]), sent_at: Utc::now(), text: Rc::new("Hello also.".to_string()) },
+        let messages = RefCell::new(vec![
+            Message::new(&members[1], &Utc::now(), "Hello!!"),
+            Message::new(&members[0], &Utc::now(), "Hello also."),
         ]);
 
         Self { link, local_member: None, members, messages }
@@ -42,7 +44,15 @@ impl Component for Chat {
             Msg::SetLocalMember(nick) => {
                 let local_member = Rc::new(Member::new(&nick));
                 self.local_member = Some(Rc::clone(&local_member));
-                false
+            }
+            Msg::CreateMessage(mut text) => {
+                if let Some(member) = &self.local_member {
+                    if text == "/shrug" {
+                        text = r"¯\_(ツ)_/¯".to_string();
+                    }
+                    let msg = Message { from: Rc::clone(&member), sent_at: Utc::now(), text: Rc::new(text) };
+                    self.messages.borrow_mut().push(msg);
+                }
             }
         };
         true
@@ -73,7 +83,7 @@ impl Chat {
         html! {
             <div class="container-chat">
                 <div class="container-msg-view"><MessageView messages=&self.messages /></div>
-                <div class="container-msg-input"><MessageInput /></div>
+                <div class="container-msg-input"><MessageInput on_enter=self.link.callback(|msg| Msg::CreateMessage(msg)) /></div>
             </div>
         }
     }

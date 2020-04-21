@@ -5,6 +5,7 @@ pub struct MessageInput {
     link: ComponentLink<Self>,
     value: String,
     input_ref: NodeRef,
+    on_enter: Callback<String>,
 }
 
 pub enum Msg {
@@ -13,15 +14,21 @@ pub enum Msg {
     SendMessage,
 }
 
+#[derive(Properties, PartialEq, Clone)]
+pub struct Props {
+    pub on_enter: Callback<String>,
+}
+
 impl Component for MessageInput {
     type Message = Msg;
-    type Properties = ();
+    type Properties = Props;
 
-    fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
+    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self {
             link,
             value: String::new(),
-            input_ref: NodeRef::default()
+            input_ref: NodeRef::default(),
+            on_enter: props.on_enter,
         }
     }
 
@@ -53,11 +60,11 @@ impl Component for MessageInput {
 
 impl MessageInput {
     fn send_message(&mut self) -> ShouldRender {
-        let msg_text: &String = &self.value;
-        if msg_text.trim().is_empty() {
+        let msg_text: &str = &self.value.trim();
+        if msg_text.is_empty() {
             return false;
         } else {
-            // todo: send
+            self.on_enter.emit(msg_text.to_string());
         }
 
         self.value = String::new();

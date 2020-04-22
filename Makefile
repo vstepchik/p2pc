@@ -16,11 +16,12 @@ build-backend:
 	cargo build $(BACKEND_ARGS)
 
 build-frontend:
-	wasm-pack build --target web frontend
+	wasm-pack build --release --target web frontend
 	rollup ./frontend/main.js --format iife --file ./frontend/pkg/bundle.js
 	cp ./frontend/pkg/bundle.js ./frontend/pkg/p2pc_bg.wasm ./frontend/static/app/
 	brotli -f ./frontend/static/app/*.{js,wasm} ./frontend/static/css/*.css
 	gzip -f9k ./frontend/static/app/*.{js,wasm} ./frontend/static/css/*.css
+	tree --du -h ./frontend/static
 
 lint-clippy:
 	cargo clippy --all -- -D warnings

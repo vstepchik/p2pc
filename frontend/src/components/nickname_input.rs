@@ -72,9 +72,10 @@ impl NicknameInput {
     fn render_view(&self) -> Html {
         html! {
             <div class="cpt-nick-input">
-                <div>{ "Introduce yourself:" }</div>
+                <label for="nickname">{ "Introduce yourself:" }</label>
                 <div class="cpt-nick-input-controls">
                     <input 
+                        name="nickname"
                         type="text"
                         autocomplete="off"
                         ref=self.input_ref.clone()

@@ -27,6 +27,13 @@ html, body {
     flex-direction: column;
 }
 
+.container-intro {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .container-msg-view {
     flex: 1;
     overflow-y: scroll;
@@ -75,4 +82,29 @@ html, body {
 
 .cpt-member-list {
     padding: 0.25em 0.5em;
+}
+
+.cpt-nick-input {
+    display: flex;
+    flex-direction: column;
+}
+
+.cpt-nick-input-controls {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid $global-border-color;
+}
+
+.cpt-nick-input input {
+    border: none;
+    background: $global-msg-input-color;
+    height: 22px;
+    flex: 1;
+    padding: 0 0.25em;
+}
+
+.cpt-nick-input button {
+    border: none;
+    background: $global-msg-send-color;
+    height: 22px;
 }
